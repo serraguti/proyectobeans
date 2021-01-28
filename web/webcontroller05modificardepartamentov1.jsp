@@ -7,17 +7,19 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-      </head>
+    </head>
     <body>
-        <h1>Insertar departamento</h1>
+        <h1>Modificar departamento v.1</h1>
         <form method="post">
-            <label>Número: </label>
+            <label>Número </label>
             <input type="number" name="cajanumero" required/><br/>
             <label>Nombre: </label>
             <input type="text" name="cajanombre" required/><br/>
             <label>Localidad: </label>
             <input type="text" name="cajalocalidad" required/><br/>
-            <button type="submit">Insertar</button>            
+            <button type="submit">
+                Modificar departamento
+            </button>
         </form>
         <%
         String dato = request.getParameter("cajanumero");
@@ -25,7 +27,7 @@
             int deptno = Integer.parseInt(dato);
             String nombre = request.getParameter("cajanombre");
             String localidad = request.getParameter("cajalocalidad");
-            controllerdept.insertarDepartamento(deptno, nombre, localidad);
+            controllerdept.modificarDepartamento(deptno, nombre, localidad);
         }
         %>
         <table border="1">

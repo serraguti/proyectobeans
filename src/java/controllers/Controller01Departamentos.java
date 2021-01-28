@@ -56,4 +56,38 @@ public class Controller01Departamentos {
     public void insertarDepartamento(int deptno, String nombre, String localidad) throws SQLException {
         this.repo.insertarDepartamento(deptno, nombre, localidad);
     }
+
+    public void modificarDepartamento(int deptno, String nombre, String localidad) throws SQLException {
+        this.repo.modificarDepartamento(deptno, nombre, localidad);
+    }
+
+    public String getFormularioDepartamentos(int deptno) throws SQLException {
+        Departamento dept = this.repo.buscarDepartamento(deptno);
+        String html = "<label>Número: </label>"
+                + "<input type='number' name='cajanumero' value='"
+                + dept.getNumero() + "' readonly/><br/>";
+        html += "<label>Nombre</label>"
+                + "<input type='text' name='cajanombre' value='"
+                + dept.getNombre() + "' required/><br/>";
+        html += "<label>Localidad</label>"
+                + "<input type='text' name='cajalocalidad' value='"
+                + dept.getLocalidad() + "' required/>";
+        return html;
+    }
+
+    public String getTablaEdicionDepartamentos() throws SQLException {
+        ArrayList<Departamento> departamentos = this.repo.getDepartamentos();
+        String html = "";
+        for (Departamento dept : departamentos) {
+            html += "<tr>";
+            html += "<td>" + dept.getNumero() + "</td>";
+            html += "<td>" + dept.getNombre() + "</td>";
+            html += "<td>" + dept.getLocalidad() + "</td>";
+            html += "<td>";
+            html += "<button type='button'>Editar</button>";
+            html += "</td>";
+            html += "</tr>";
+        }
+        return html;
+    }
 }

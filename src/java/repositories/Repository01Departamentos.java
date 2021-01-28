@@ -82,4 +82,15 @@ public class Repository01Departamentos {
         pst.executeUpdate();
         cn.close();
     }
+
+    public void modificarDepartamento(int deptno, String nombre, String localidad) throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "update dept set dnombre=?, loc=? where dept_no=?";
+        PreparedStatement pst = cn.prepareStatement(sql);
+        pst.setString(1, nombre);
+        pst.setString(2, localidad);
+        pst.setInt(3, deptno);
+        pst.executeUpdate();
+        cn.close();
+    }
 }
