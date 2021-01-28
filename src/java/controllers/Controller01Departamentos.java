@@ -48,4 +48,8 @@ public class Controller01Departamentos {
         html += "<h1>Localidad: " + dept.getLocalidad() + "</h1>";
         return html;
     }
+
+    public void eliminarDepartamento(int deptno) throws SQLException {
+        this.repo.eliminarDepartamento(deptno);
+    }
 }

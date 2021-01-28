@@ -62,4 +62,14 @@ public class Repository01Departamentos {
         cn.close();
         return dept;
     }
+
+    public void eliminarDepartamento(int deptno) throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "delete from dept where dept_no=?";
+        PreparedStatement pst = cn.prepareStatement(sql);
+        pst.setInt(1, deptno);
+        pst.executeUpdate();
+        cn.close();
+    }
+
 }
