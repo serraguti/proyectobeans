@@ -52,4 +52,8 @@ public class Controller01Departamentos {
     public void eliminarDepartamento(int deptno) throws SQLException {
         this.repo.eliminarDepartamento(deptno);
     }
+
+    public void insertarDepartamento(int deptno, String nombre, String localidad) throws SQLException {
+        this.repo.insertarDepartamento(deptno, nombre, localidad);
+    }
 }
