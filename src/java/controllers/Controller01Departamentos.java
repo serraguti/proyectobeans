@@ -84,7 +84,27 @@ public class Controller01Departamentos {
             html += "<td>" + dept.getNombre() + "</td>";
             html += "<td>" + dept.getLocalidad() + "</td>";
             html += "<td>";
-            html += "<button type='button'>Editar</button>";
+            html += "<button type='button' name='botonedicion' ";
+            html += "value='" + dept.getNumero() + "' ";
+            html += "data-nombre='" + dept.getNombre() + "' ";
+            html += "data-localidad='" + dept.getLocalidad() + "' ";
+            html += ">Editar</button>";
+            html += "</td>";
+            html += "</tr>";
+        }
+        return html;
+    }
+
+    public String getTablaEliminarDepartamento() throws SQLException {
+        ArrayList<Departamento> departamentos = this.repo.getDepartamentos();
+        String html = "";
+        for (Departamento dept : departamentos) {
+            html += "<tr>";
+            html += "<td>" + dept.getNumero() + "</td>";
+            html += "<td>" + dept.getNombre() + "</td>";
+            html += "<td>" + dept.getLocalidad() + "</td>";
+            html += "<td>";
+            html += "<button type='submit' name='eliminar' value='" + dept.getNumero() + "'>Eliminar</button>";
             html += "</td>";
             html += "</tr>";
         }
