@@ -1,5 +1,22 @@
+/*
+create or replace procedure insertarhospital
+(p_nombre hospital.nombre%type
+, p_direccion hospital.direccion%type
+, p_telefono hospital.telefono%type
+, p_camas hospital.num_cama%type)
+as
+  v_maximo hospital.hospital_cod%type;
+begin
+  select max(hospital_cod) + 1 into v_maximo
+  from hospital;
+  insert into hospital values (v_maximo, p_nombre
+  , p_direccion, p_telefono, p_camas);
+  commit;
+end;
+ */
 package repositories;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -56,15 +73,13 @@ public class RepositoryHospital {
     public void insertarHospital(String nombre, String direccion,
             String tlf, int camas) throws SQLException {
         Connection cn = this.getConnection();
-        String sql = "insert into hospital values (?,?,?,?,?)";
-        PreparedStatement pst = cn.prepareStatement(sql);
-        int maximo = this.getMaxIdHospital();
-        pst.setInt(1, maximo);
-        pst.setString(2, nombre);
-        pst.setString(3, direccion);
-        pst.setString(4, tlf);
-        pst.setInt(5, camas);
-        pst.executeUpdate();
+        String sql = "{ call insertarhospital(?,?,?,?) }";
+        CallableStatement cst = cn.prepareCall(sql);
+        cst.setString(1, nombre);
+        cst.setString(2, direccion);
+        cst.setString(3, tlf);
+        cst.setInt(4, camas);
+        cst.executeUpdate();
         cn.close();
     }
 }
