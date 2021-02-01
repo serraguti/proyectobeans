@@ -13,6 +13,16 @@ begin
   , p_direccion, p_telefono, p_camas);
   commit;
 end;
+--------------------------------------------------------------
+create or replace procedure detalleshospital
+(p_hospitalcod hospital.hospital_cod%type
+, v_personas out int, v_suma out int, v_media out int)
+as
+begin
+  select count(doctor_no), sum(salario), avg(salario)
+  into v_personas, v_suma, v_media from doctor
+  where hospital_cod=p_hospitalcod;
+end;
  */
 package repositories;
 
@@ -24,6 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import models.DetalleHospital;
 import models.Hospital;
 import oracle.jdbc.OracleDriver;
 
@@ -81,5 +92,23 @@ public class RepositoryHospital {
         cst.setInt(4, camas);
         cst.executeUpdate();
         cn.close();
+    }
+
+    public DetalleHospital getDetallesHospital(int idhospital) throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "{ call detalleshospital(?, ?, ?, ?) }";
+        CallableStatement cst = cn.prepareCall(sql);
+        cst.setInt(1, idhospital);
+        cst.registerOutParameter(2, java.sql.Types.INTEGER);
+        cst.registerOutParameter(3, java.sql.Types.INTEGER);
+        cst.registerOutParameter(4, java.sql.Types.INTEGER);
+        cst.execute();
+        int personas = cst.getInt(2);
+        int suma = cst.getInt(3);
+        int media = cst.getInt(4);
+        DetalleHospital detalle
+                = new DetalleHospital(personas, suma, media);
+        cn.close();
+        return detalle;
     }
 }
