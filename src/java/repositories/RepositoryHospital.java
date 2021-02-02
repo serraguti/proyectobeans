@@ -153,4 +153,24 @@ public class RepositoryHospital {
         cst.executeUpdate();
         cn.close();
     }
+
+    public ArrayList<Doctor> getDoctores() throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "select * from doctor";
+        Statement st = cn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        ArrayList<Doctor> lista = new ArrayList<>();
+        while (rs.next()) {
+            int iddoctor = rs.getInt("DOCTOR_NO");
+            String ape = rs.getString("APELLIDO");
+            String espe = rs.getString("ESPECIALIDAD");
+            int sal = rs.getInt("SALARIO");
+            int hospitalcod = rs.getInt("HOSPITAL_COD");
+            Doctor doc = new Doctor(iddoctor, ape, espe, sal, hospitalcod);
+            lista.add(doc);
+        }
+        rs.close();
+        cn.close();
+        return lista;
+    }
 }

@@ -68,4 +68,18 @@ public class ControllerHospital {
             throws SQLException {
         this.repo.incrementarSalarioDoctores(incremento, idhospital);
     }
+
+    public String getFilasDoctores() throws SQLException {
+        ArrayList<Doctor> doctores = this.repo.getDoctores();
+        String html = "";
+        for (Doctor doc : doctores) {
+            html += "<tr>";
+            html += "<td>" + doc.getApellido() + "</td>";
+            html += "<td>" + doc.getEspecialidad() + "</td>";
+            html += "<td>" + doc.getSalario() + "</td>";
+            html += "<td>" + doc.getIdHospital() + "</td>";
+            html += "</tr>";
+        }
+        return html;
+    }
 }

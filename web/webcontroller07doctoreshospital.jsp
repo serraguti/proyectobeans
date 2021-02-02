@@ -1,4 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="controllerhospital"
+             class="controllers.ControllerHospital"
+             scope="request"/>
 <!DOCTYPE html>
 <html>
     <head>
