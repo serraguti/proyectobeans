@@ -12,34 +12,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Almacenar doctores v1</h1>
-        <a href="webcontroller08doctoressessionv1.jsp">
-            Mostrar doctores session
+        <h1>Mostrar doctores</h1>
+        <a href="webcontroller08almacenarsessiondoctoresv1.jsp">
+            Almacenar doctores
         </a>
-        <%
-        String iddoctor = request.getParameter("iddoctor");
-        if (iddoctor != null){
-            controllersession.getListadoctores().add(iddoctor);
-            %>
-            <h2 style="color:blue">
-                Doctores almacenados: 
-                <%=controllersession.getListadoctores().size()%>
-            </h2>
-            <%
-        }
-        %>
         <table border="1">
             <thead>
                 <tr>
                     <th>Apellido</th>
                     <th>Especialidad</th>
                     <th>Salario</th>
-                    <th>Hospital</th>
                 </tr>
             </thead>
             <tbody>
-                <%=controllerhospital.getFilasDoctores()%>
+                <%=controllerhospital.getDoctoresSession(controllersession.getListadoctores())%>        
             </tbody>
-        </table>   
+        </table>
     </body>
 </html>

@@ -173,4 +173,33 @@ public class RepositoryHospital {
         cn.close();
         return lista;
     }
+
+    public ArrayList<Doctor> getDoctoresHospital(ArrayList<String> codigosdoctor)
+            throws SQLException {
+        //CONCATENAMOS TODOS LOS CODIGOS SEPARADOS POR COMAS
+        String datos = "";
+        for (String cod : codigosdoctor) {
+            datos += cod + ",";
+        }
+        int ultimacoma = datos.lastIndexOf(",");
+        datos = datos.substring(0, ultimacoma);
+        Connection cn = this.getConnection();
+        String sql = "select * from doctor where doctor_no in (" + datos + ")";
+        Statement st = cn.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        ArrayList<Doctor> lista = new ArrayList<>();
+        while (rs.next()) {
+            int iddoctor = rs.getInt("DOCTOR_NO");
+            String ape = rs.getString("APELLIDO");
+            String espe = rs.getString("ESPECIALIDAD");
+            int sal = rs.getInt("SALARIO");
+            int hospitalcod = rs.getInt("HOSPITAL_COD");
+            Doctor doc = new Doctor(iddoctor, ape, espe, sal, hospitalcod);
+            lista.add(doc);
+        }
+        rs.close();
+        cn.close();
+        return lista;
+    }
+
 }

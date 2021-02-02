@@ -2,9 +2,9 @@
 <jsp:useBean id="controllerhospital"
              class="controllers.ControllerHospital"
              scope="request"/>
-<jsp:useBean id="controllersession"
-             class="controllers.ControllerSession"
-             scope="session"/>
+<%
+    controllerhospital.setSession(session);
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,20 +12,15 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Almacenar doctores v1</h1>
-        <a href="webcontroller08doctoressessionv1.jsp">
+        <h1 style="color:red">Almacenar doctores v2</h1>
+        <a href="webcontroller08doctoressessionv2.jsp">
             Mostrar doctores session
         </a>
         <%
         String iddoctor = request.getParameter("iddoctor");
         if (iddoctor != null){
-            controllersession.getListadoctores().add(iddoctor);
-            %>
-            <h2 style="color:blue">
-                Doctores almacenados: 
-                <%=controllersession.getListadoctores().size()%>
-            </h2>
-            <%
+            //ALMACENARLO EN SESSION
+            controllerhospital.almacenarDoctorSession(iddoctor);
         }
         %>
         <table border="1">
@@ -38,7 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                <%=controllerhospital.getFilasDoctores()%>
+                <%=controllerhospital.getFilasDoctoresv2()%>
             </tbody>
         </table>   
     </body>
