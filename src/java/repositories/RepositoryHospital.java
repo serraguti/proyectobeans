@@ -23,6 +23,16 @@ begin
   into v_personas, v_suma, v_media from doctor
   where hospital_cod=p_hospitalcod;
 end;
+--------------------------------------------------------------------
+create or replace procedure incrementarsalariodoctores
+(p_incremento int
+, p_hospitalcod doctor.hospital_cod%type)
+as
+begin
+  update doctor set salario = salario + p_incremento
+  where hospital_cod = p_hospitalcod;
+  commit;
+end;
  */
 package repositories;
 
@@ -35,6 +45,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import models.DetalleHospital;
+import models.Doctor;
 import models.Hospital;
 import oracle.jdbc.OracleDriver;
 
@@ -110,5 +121,36 @@ public class RepositoryHospital {
                 = new DetalleHospital(personas, suma, media);
         cn.close();
         return detalle;
+    }
+
+    public ArrayList<Doctor> getDoctores(int idhospital) throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "select * from doctor where hospital_cod=?";
+        PreparedStatement pst = cn.prepareStatement(sql);
+        pst.setInt(1, idhospital);
+        ResultSet rs = pst.executeQuery();
+        ArrayList<Doctor> lista = new ArrayList<>();
+        while (rs.next()) {
+            int iddoctor = rs.getInt("DOCTOR_NO");
+            String ape = rs.getString("APELLIDO");
+            String espe = rs.getString("ESPECIALIDAD");
+            int sal = rs.getInt("SALARIO");
+            int hospitalcod = rs.getInt("HOSPITAL_COD");
+            Doctor doc = new Doctor(iddoctor, ape, espe, sal, hospitalcod);
+            lista.add(doc);
+        }
+        rs.close();
+        cn.close();
+        return lista;
+    }
+
+    public void incrementarSalarioDoctores(int incremento, int idhospital) throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "{ call incrementarsalariodoctores (?, ?) }";
+        CallableStatement cst = cn.prepareCall(sql);
+        cst.setInt(1, incremento);
+        cst.setInt(2, idhospital);
+        cst.executeUpdate();
+        cn.close();
     }
 }

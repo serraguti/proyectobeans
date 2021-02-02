@@ -20,6 +20,8 @@
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Camas</th>
+                    <td></td>
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
