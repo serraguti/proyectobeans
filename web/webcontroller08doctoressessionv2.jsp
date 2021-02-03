@@ -12,6 +12,12 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <%
+        String iddoctor = request.getParameter("eliminar");
+        if (iddoctor != null){
+            controllerhospital.eliminarDoctorSession(iddoctor);
+        }
+        %>
         <h1 style="color:red">Mostrar doctores v2</h1>
         <a href="webcontroller08almacenarsessiondoctoresv2.jsp">
             Almacenar doctores

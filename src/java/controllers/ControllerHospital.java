@@ -95,6 +95,7 @@ public class ControllerHospital {
 
     public String getFilasDoctoresv2() throws SQLException {
         ArrayList<Doctor> doctores = this.repo.getDoctores();
+        ArrayList<String> doctoressesion = (ArrayList) session.getAttribute("DOCTORES");
         String html = "";
         for (Doctor doc : doctores) {
             html += "<tr>";
@@ -102,10 +103,20 @@ public class ControllerHospital {
             html += "<td>" + doc.getEspecialidad() + "</td>";
             html += "<td>" + doc.getSalario() + "</td>";
             html += "<td>" + doc.getIdHospital() + "</td>";
-            html += "<td>";
-            html += "<a href='webcontroller08almacenarsessiondoctoresv2.jsp?iddoctor=";
-            html += doc.getIdDoctor() + "'>Almacenar</a>";
-            html += "</td>";
+            if (doctoressesion == null) {
+                //DIBUJAMOS Almacenar
+                html += "<td>";
+                html += "<a href='webcontroller08almacenarsessiondoctoresv2.jsp?iddoctor=";
+                html += doc.getIdDoctor() + "'>Almacenar</a>";
+                html += "</td>";
+                //SI EL DOCTOR NO EXISTE EN LA SESION, DIBUJAMOS ALMACENAR
+            } else if (doctoressesion.contains(String.valueOf(doc.getIdDoctor())) == false) {
+                //DIBUJAMOS Almacenar
+                html += "<td>";
+                html += "<a href='webcontroller08almacenarsessiondoctoresv2.jsp?iddoctor=";
+                html += doc.getIdDoctor() + "'>Almacenar</a>";
+                html += "</td>";
+            }
             html += "</tr>";
         }
         return html;
@@ -129,7 +140,7 @@ public class ControllerHospital {
         return html;
     }
 
-    public void almacenarDoctorSession(String iddoctor) {
+    public String almacenarDoctorSession(String iddoctor) {
         //MANEJAMOS LA SESSION MANUALMENTE
         ArrayList<String> codigos;
         //PREGUNTAMOS SI EXISTE ALGO EN SESSION
@@ -138,10 +149,13 @@ public class ControllerHospital {
         } else {
             codigos = (ArrayList) session.getAttribute("DOCTORES");
         }
-        //AÑADIMOS EL NUEVO DOCTOR A LA SESSION
-        codigos.add(iddoctor);
-        //ALMACENAMOS EL NUEVO VALOR DE SESSION
-        session.setAttribute("DOCTORES", codigos);
+        //AÑADIMOS EL NUEVO DOCTOR A LA SESSION SI NO EXISTE
+        if (codigos.contains(iddoctor) == false) {
+            codigos.add(iddoctor);
+            //ALMACENAMOS EL NUEVO VALOR DE SESSION
+            session.setAttribute("DOCTORES", codigos);
+        }
+        return "Doctores almacenados: " + codigos.size();
     }
 
     public String getDoctoresSession()
@@ -159,8 +173,27 @@ public class ControllerHospital {
             html += "<td>" + doc.getApellido() + "</td>";
             html += "<td>" + doc.getEspecialidad() + "</td>";
             html += "<td>" + doc.getSalario() + "</td>";
+            html += "<td>";
+            html += "<a href='webcontroller08doctoressessionv2.jsp?eliminar=";
+            html += doc.getIdDoctor() + "'>Quitar Session</a>";
+            html += "</td>";
             html += "</tr>";
         }
         return html;
+    }
+
+    public void eliminarDoctorSession(String iddoctor) {
+        //RECUPERAMOS LA LISTA DE IDs DOCTORES DE SESSION
+        ArrayList<String> doctores = (ArrayList) session.getAttribute("DOCTORES");
+        //ELIMINAMOS EL ID DOCTOR DE LA LISTA
+        doctores.remove(iddoctor);
+        //COMPROBAMOS SI YA NO TENEMOS DOCTORES EN LA LISTA
+        if (doctores.size() == 0) {
+            //SI NO HAY DOCTORES, BORRAMOS LA SESION
+            session.setAttribute("DOCTORES", null);
+        } else {
+            //ALMACENAMOS LA NUEVA LISTA (SIN DOCTOR) EN SESSION
+            session.setAttribute("DOCTORES", doctores);
+        }
     }
 }

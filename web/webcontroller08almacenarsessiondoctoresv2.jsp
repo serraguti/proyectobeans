@@ -20,7 +20,9 @@
         String iddoctor = request.getParameter("iddoctor");
         if (iddoctor != null){
             //ALMACENARLO EN SESSION
-            controllerhospital.almacenarDoctorSession(iddoctor);
+            %>
+            <h1><%=controllerhospital.almacenarDoctorSession(iddoctor)%></h1>
+            <%
         }
         %>
         <table border="1">
